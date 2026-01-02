@@ -1,0 +1,254 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "BMB",
+  "scopeName": "source.bmb",
+  "patterns": [
+    { "include": "#comments" },
+    { "include": "#attributes" },
+    { "include": "#functions" },
+    { "include": "#structs" },
+    { "include": "#enums" },
+    { "include": "#use-statements" },
+    { "include": "#contracts" },
+    { "include": "#keywords" },
+    { "include": "#operators" },
+    { "include": "#types" },
+    { "include": "#literals" },
+    { "include": "#identifiers" }
+  ],
+  "repository": {
+    "comments": {
+      "name": "comment.line.double-slash.bmb",
+      "match": "//.*$"
+    },
+    "attributes": {
+      "name": "meta.attribute.bmb",
+      "match": "@(trust|check|inline|pure|test|bench|deprecated|unsafe)",
+      "captures": {
+        "0": { "name": "entity.other.attribute-name.bmb" }
+      }
+    },
+    "functions": {
+      "name": "meta.function.bmb",
+      "begin": "\\b(fn)\\s+([a-zA-Z_][a-zA-Z0-9_]*)\\s*(<[^>]*>)?\\s*\\(",
+      "beginCaptures": {
+        "1": { "name": "keyword.other.fn.bmb" },
+        "2": { "name": "entity.name.function.bmb" },
+        "3": { "name": "entity.name.type.parameter.bmb" }
+      },
+      "end": "\\)",
+      "patterns": [
+        { "include": "#parameters" }
+      ]
+    },
+    "parameters": {
+      "patterns": [
+        {
+          "match": "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\s*:\\s*",
+          "captures": {
+            "1": { "name": "variable.parameter.bmb" }
+          }
+        },
+        { "include": "#types" }
+      ]
+    },
+    "structs": {
+      "name": "meta.struct.bmb",
+      "match": "\\b(struct)\\s+([A-Z][a-zA-Z0-9_]*)\\s*(<[^>]*>)?",
+      "captures": {
+        "1": { "name": "keyword.other.struct.bmb" },
+        "2": { "name": "entity.name.type.struct.bmb" },
+        "3": { "name": "entity.name.type.parameter.bmb" }
+      }
+    },
+    "enums": {
+      "name": "meta.enum.bmb",
+      "match": "\\b(enum)\\s+([A-Z][a-zA-Z0-9_]*)\\s*(<[^>]*>)?",
+      "captures": {
+        "1": { "name": "keyword.other.enum.bmb" },
+        "2": { "name": "entity.name.type.enum.bmb" },
+        "3": { "name": "entity.name.type.parameter.bmb" }
+      }
+    },
+    "use-statements": {
+      "name": "meta.use.bmb",
+      "match": "\\b(use)\\s+([a-zA-Z_][a-zA-Z0-9_:]*)",
+      "captures": {
+        "1": { "name": "keyword.control.import.bmb" },
+        "2": { "name": "entity.name.namespace.bmb" }
+      }
+    },
+    "contracts": {
+      "patterns": [
+        {
+          "name": "keyword.contract.precondition.bmb",
+          "match": "\\b(pre)\\b"
+        },
+        {
+          "name": "keyword.contract.postcondition.bmb",
+          "match": "\\b(post)\\b"
+        },
+        {
+          "name": "keyword.contract.invariant.bmb",
+          "match": "\\b(invariant)\\b"
+        },
+        {
+          "name": "keyword.contract.where.bmb",
+          "match": "\\b(where)\\b"
+        },
+        {
+          "name": "keyword.contract.modifies.bmb",
+          "match": "\\b(modifies)\\b"
+        },
+        {
+          "name": "keyword.contract.decreases.bmb",
+          "match": "\\b(decreases)\\b"
+        },
+        {
+          "name": "keyword.contract.satisfies.bmb",
+          "match": "\\b(satisfies)\\b"
+        },
+        {
+          "name": "variable.language.contract.bmb",
+          "match": "\\b(ret|it|old)\\b"
+        }
+      ]
+    },
+    "keywords": {
+      "patterns": [
+        {
+          "name": "keyword.control.bmb",
+          "match": "\\b(if|then|else|match|while|for|in|return|break|continue)\\b"
+        },
+        {
+          "name": "keyword.other.bmb",
+          "match": "\\b(fn|let|mut|type|struct|enum|mod|pub|use|new|rec)\\b"
+        },
+        {
+          "name": "keyword.memory.bmb",
+          "match": "\\b(own|ref|move|copy|drop|linear)\\b"
+        },
+        {
+          "name": "keyword.quantifier.bmb",
+          "match": "\\b(forall|exists)\\b"
+        },
+        {
+          "name": "keyword.low.bmb",
+          "match": "\\b(low)\\b"
+        },
+        {
+          "name": "constant.language.boolean.bmb",
+          "match": "\\b(true|false)\\b"
+        }
+      ]
+    },
+    "operators": {
+      "patterns": [
+        {
+          "name": "keyword.operator.logical.bmb",
+          "match": "\\b(and|or|not)\\b"
+        },
+        {
+          "name": "keyword.operator.comparison.bmb",
+          "match": "==|!=|<=|>=|<|>"
+        },
+        {
+          "name": "keyword.operator.arithmetic.bmb",
+          "match": "\\+|-|\\*|/|%"
+        },
+        {
+          "name": "keyword.operator.assignment.bmb",
+          "match": "="
+        },
+        {
+          "name": "keyword.operator.range.bmb",
+          "match": "\\.\\.<|\\.\\.|\\.\\.="
+        },
+        {
+          "name": "keyword.operator.reference.bmb",
+          "match": "&(mut)?|\\*"
+        },
+        {
+          "name": "keyword.operator.arrow.bmb",
+          "match": "->"
+        }
+      ]
+    },
+    "types": {
+      "patterns": [
+        {
+          "name": "storage.type.primitive.bmb",
+          "match": "\\b(i8|i16|i32|i64|i128|u8|u16|u32|u64|u128|f32|f64|bool|char|String)\\b"
+        },
+        {
+          "name": "storage.type.unit.bmb",
+          "match": "\\(\\)"
+        },
+        {
+          "name": "entity.name.type.bmb",
+          "match": "\\b[A-Z][a-zA-Z0-9_]*\\b"
+        }
+      ]
+    },
+    "literals": {
+      "patterns": [
+        {
+          "name": "constant.numeric.integer.bmb",
+          "match": "\\b\\d+(_\\d+)*\\b"
+        },
+        {
+          "name": "constant.numeric.float.bmb",
+          "match": "\\b\\d+(_\\d+)*\\.\\d+(_\\d+)*([eE][+-]?\\d+)?\\b"
+        },
+        {
+          "name": "constant.numeric.hex.bmb",
+          "match": "\\b0x[0-9a-fA-F]+(_[0-9a-fA-F]+)*\\b"
+        },
+        {
+          "name": "constant.numeric.binary.bmb",
+          "match": "\\b0b[01]+(_[01]+)*\\b"
+        },
+        {
+          "name": "constant.numeric.octal.bmb",
+          "match": "\\b0o[0-7]+(_[0-7]+)*\\b"
+        },
+        {
+          "include": "#strings"
+        },
+        {
+          "include": "#characters"
+        }
+      ]
+    },
+    "strings": {
+      "name": "string.quoted.double.bmb",
+      "begin": "\"",
+      "end": "\"",
+      "patterns": [
+        {
+          "name": "constant.character.escape.bmb",
+          "match": "\\\\."
+        }
+      ]
+    },
+    "characters": {
+      "name": "string.quoted.single.bmb",
+      "begin": "'",
+      "end": "'",
+      "patterns": [
+        {
+          "name": "constant.character.escape.bmb",
+          "match": "\\\\."
+        }
+      ]
+    },
+    "identifiers": {
+      "patterns": [
+        {
+          "name": "variable.other.bmb",
+          "match": "\\b[a-z_][a-zA-Z0-9_]*\\b"
+        }
+      ]
+    }
+  }
+}
