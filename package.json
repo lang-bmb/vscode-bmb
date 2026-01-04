@@ -18,7 +18,8 @@
   "categories": [
     "Programming Languages",
     "Linters",
-    "Formatters"
+    "Formatters",
+    "Snippets"
   ],
   "keywords": [
     "bmb",
@@ -54,6 +55,12 @@
         "language": "bmb",
         "scopeName": "source.bmb",
         "path": "./syntaxes/bmb.tmLanguage.json"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "bmb",
+        "path": "./snippets/bmb.json"
       }
     ],
     "configuration": {

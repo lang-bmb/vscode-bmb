@@ -11,6 +11,7 @@ Visual Studio Code extension for BMB (Bare-Metal-Banter) programming language.
 - **Find References**: Find all references to a symbol
 - **Formatting**: Code formatting on save
 - **Contract Verification**: Trigger SMT-based contract verification
+- **Code Snippets**: 20+ snippets for common patterns
 
 ## Requirements
 
@@ -53,6 +54,31 @@ npm run compile
 | `BMB: Restart Language Server` | Restart the BMB language server |
 | `BMB: Verify Contracts` | Run SMT verification on the current file |
 | `BMB: Show AST` | Display the AST of the current file |
+
+## Snippets
+
+| Prefix | Description |
+|--------|-------------|
+| `fn` | Simple function |
+| `fnc` | Function with contracts |
+| `fnb` | Function with block body |
+| `pre` | Precondition |
+| `post` | Postcondition |
+| `let` | Let binding |
+| `if` | If-then-else expression |
+| `struct` | Struct definition |
+| `enum` | Enum definition |
+| `type` | Type alias |
+| `typer` | Refinement type |
+| `forall` | Universal quantifier |
+| `exists` | Existential quantifier |
+| `match` | Pattern matching |
+| `@trust` | Trusted function |
+| `@check` | Function with runtime check |
+| `@test` | Test function |
+| `@bench` | Benchmark function |
+| `tailrec` | Tail-recursive pattern |
+| `main` | Main entry point |
 
 ## Supported Syntax
 
@@ -123,7 +149,7 @@ npm run package
 ## Related
 
 - [BMB Compiler](https://github.com/lang-bmb/lang-bmb) - Main compiler repository
-- [tree-sitter-bmb](https://github.com/lang-bmb/tree-sitter-bmb) - Tree-sitter grammar
+- [BMB Playground](https://play.bmb-lang.org) - Try BMB online
 
 ## License
 
