@@ -2,7 +2,7 @@
   "name": "vscode-bmb",
   "displayName": "BMB Language",
   "description": "BMB (Bare-Metal-Banter) language support for Visual Studio Code",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "publisher": "lang-bmb",
   "license": "MIT",
   "repository": {
@@ -90,6 +90,16 @@
           "type": "boolean",
           "default": true,
           "description": "Format BMB files on save"
+        },
+        "bmb.lintOnSave": {
+          "type": "boolean",
+          "default": true,
+          "description": "Run linter on save"
+        },
+        "bmb.toolsPath": {
+          "type": "string",
+          "default": "",
+          "description": "Path to BMB tools directory (leave empty for default)"
         }
       }
     },
@@ -105,6 +115,22 @@
       {
         "command": "bmb.showAst",
         "title": "BMB: Show AST"
+      },
+      {
+        "command": "bmb.format",
+        "title": "BMB: Format Document"
+      },
+      {
+        "command": "bmb.lint",
+        "title": "BMB: Run Linter"
+      },
+      {
+        "command": "bmb.check",
+        "title": "BMB: Type Check"
+      },
+      {
+        "command": "bmb.generateDocs",
+        "title": "BMB: Generate Documentation"
       }
     ]
   },
