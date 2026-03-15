@@ -6,7 +6,8 @@ import {
     LanguageClient,
     LanguageClientOptions,
     ServerOptions,
-    TransportKind
+    TransportKind,
+    Trace
 } from 'vscode-languageclient/node';
 
 const execAsync = promisify(exec);
@@ -16,17 +17,33 @@ let diagnosticCollection: vscode.DiagnosticCollection;
 export async function activate(context: vscode.ExtensionContext): Promise<void> {
     const config = vscode.workspace.getConfiguration('bmb');
     const serverPath = config.get<string>('serverPath', 'bmb');
+    const lspServerPath = config.get<string>('lspServerPath', '');
     const traceServer = config.get<string>('trace.server', 'off');
 
-    // Server options - run BMB compiler in LSP mode
-    const serverOptions: ServerOptions = {
-        command: serverPath,
-        args: ['lsp'],
-        transport: TransportKind.stdio,
-        options: {
-            env: { ...process.env, RUST_BACKTRACE: '1' }
-        }
-    };
+    // Server options — choose between self-hosted BMB LSP or Rust-based server
+    let serverOptions: ServerOptions;
+    if (lspServerPath) {
+        // Self-hosted BMB LSP server (bmb-lsp binary)
+        // BMB_PATH tells the server where to find the bmb compiler for diagnostics/formatting
+        serverOptions = {
+            command: lspServerPath,
+            args: [],
+            transport: TransportKind.stdio,
+            options: {
+                env: { ...process.env, BMB_PATH: serverPath }
+            }
+        };
+    } else {
+        // Rust-based LSP server (bmb lsp subcommand)
+        serverOptions = {
+            command: serverPath,
+            args: ['lsp'],
+            transport: TransportKind.stdio,
+            options: {
+                env: { ...process.env, RUST_BACKTRACE: '1' }
+            }
+        };
+    }
 
     // Client options
     const clientOptions: LanguageClientOptions = {
@@ -54,8 +71,8 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     if (traceServer !== 'off') {
         client.setTrace(
             traceServer === 'verbose'
-                ? vscode.Trace.Verbose
-                : vscode.Trace.Messages
+                ? Trace.Verbose
+                : Trace.Messages
         );
     }
 
@@ -245,9 +262,10 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
             if (e.affectsConfiguration('bmb')) {
                 const newConfig = vscode.workspace.getConfiguration('bmb');
                 const newServerPath = newConfig.get<string>('serverPath', 'bmb');
+                const newLspPath = newConfig.get<string>('lspServerPath', '');
 
-                // Restart server if path changed
-                if (newServerPath !== serverPath && client) {
+                // Restart server if any path changed
+                if ((newServerPath !== serverPath || newLspPath !== lspServerPath) && client) {
                     await client.stop();
                     await client.start();
                 }
@@ -260,9 +278,12 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
         await client.start();
         console.log('BMB Language Server started');
     } catch (error) {
+        const serverInfo = lspServerPath
+            ? `Self-hosted LSP: ${lspServerPath}`
+            : `Rust LSP: ${serverPath} lsp`;
         vscode.window.showErrorMessage(
-            `Failed to start BMB Language Server: ${error}\n` +
-            `Make sure 'bmb' is installed and in your PATH, or configure 'bmb.serverPath'.`
+            `Failed to start BMB Language Server (${serverInfo}): ${error}\n` +
+            `Configure 'bmb.serverPath' (compiler) and optionally 'bmb.lspServerPath' (self-hosted LSP binary).`
         );
     }
 }

@@ -71,6 +71,11 @@
           "default": "bmb",
           "description": "Path to the BMB compiler executable"
         },
+        "bmb.lspServerPath": {
+          "type": "string",
+          "default": "",
+          "description": "Path to the self-hosted BMB LSP server binary (bmb-lsp). Leave empty to use 'bmb lsp' (Rust-based server)."
+        },
         "bmb.trace.server": {
           "type": "string",
           "enum": [
